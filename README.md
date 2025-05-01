@@ -5,6 +5,8 @@ Este proyecto fue realizado por varios estudiantes como práctica de programaci�
 
 ---
 
+<img src="img/ftjuego.png">  
+
 ## 🎮 ¿De qué trata este proyecto?
 
 Es una versión interactiva del juego de toda la vida: **Piedra vs Papel vs Tijera**, donde puedes jugar contra la computadora.  
