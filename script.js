@@ -15,33 +15,51 @@ function jugar(eleccionUsuario) {
 
     const resultado = determinarGanador(eleccionUsuario, eleccionPc);
 
-    // Restar vidas si uno pierde
+    
+    const vidasUsuarioAntes = vidasUsuario;
+    const vidasPcAntes = vidasPc;
+
+    
     if (resultado === "¡Ganaste!") {
         vidasPc--;
     } else if (resultado === "Perdiste...") {
         vidasUsuario--;
     }
 
-    // Actualizar contadores en pantalla
+    
+    document.getElementById("resultado").innerHTML = resultado;
+
+    
     document.getElementById("contador-vidas-us").textContent = vidasUsuario;
     document.getElementById("contador-vidas-pc").textContent = vidasPc;
 
-    // Mostrar resultado
-    document.getElementById("resultado").innerHTML = resultado;
+    
+    const anchoUsuario = (vidasUsuario / 5) * 430;
+    const anchoPc = (vidasPc / 5) * 430;
 
-    actualizarBarrasDeVida();
+    const barraUsuario = document.getElementById("barra-contadora-us");
+    const barraPc = document.getElementById("barra-contadora-pc");
 
+    barraUsuario.style.width = `${anchoUsuario}px`;
+    barraPc.style.width = `${anchoPc}px`;
 
-    // Comprobar si alguien ya perdió todas las vidas
+    
+    if (vidasUsuario < vidasUsuarioAntes) {
+        animarBarra("barra-contadora-us");
+    }
+    if (vidasPc < vidasPcAntes) {
+        animarBarra("barra-contadora-pc");
+    }
+
+    
     if (vidasUsuario === 0 || vidasPc === 0) {
         finalizarJuego();
     }
 }
 
 
-// Esta función adapta el nombre para que coincida con la imagen del archivo
 function formatearNombre(nombre) {
-    if (nombre === "tijera") return "Tijeras"; // caso especial
+    if (nombre === "tijera") return "Tijeras"; 
     return nombre.charAt(0).toUpperCase() + nombre.slice(1).toLowerCase();
 }
 
@@ -62,9 +80,9 @@ const maxVidas = 5;
 const maxAncho = 430;
 function animarBarra(barraId) {
     const barra = document.getElementById(barraId);
-    barra.classList.remove("animar-daño"); // Elimina la animación anterior
-    barra.offsetWidth; // Fuerza el reflow para reiniciar la animación
-    barra.classList.add("animar-daño"); // Vuelve a agregar la animación
+    barra.classList.remove("animar-daño"); 
+    barra.offsetWidth; 
+    barra.classList.add("animar-daño"); 
 }
 
 function actualizarBarrasDeVida() {
@@ -77,7 +95,7 @@ function actualizarBarrasDeVida() {
     barraUsuario.style.width = `${anchoUsuario}px`;
     barraPc.style.width = `${anchoPc}px`;
 
-    // Agregar animación de daño a las barras
+    
     if (vidasUsuario < 5) {
         animarBarra("barra-contadora-us");
     }
@@ -86,13 +104,58 @@ function actualizarBarrasDeVida() {
     }
 }
 
+function volverAlInicio() {
+    document.getElementById("juego").style.display = "none";
+    document.getElementById("inicio").style.display = "flex"; 
+
+    
+    vidasUsuario = 5;
+    vidasPc = 5;
+    document.getElementById("contador-vidas-us").textContent = vidasUsuario;
+    document.getElementById("contador-vidas-pc").textContent = vidasPc;
+    actualizarBarrasDeVida();
+
+    
+    document.getElementById("piedra").disabled = false;
+    document.getElementById("papel").disabled = false;
+    document.getElementById("tijera").disabled = false;
+
+    
+    document.getElementById("resultado").innerHTML = "";
+}
+function reiniciarJuego() {
+
+    vidasUsuario = 5;
+    vidasPc = 5;
+
+    
+    document.getElementById("contador-vidas-us").textContent = vidasUsuario;
+    document.getElementById("contador-vidas-pc").textContent = vidasPc;
+
+    
+    actualizarBarrasDeVida();
+
+    
+    document.getElementById("imagen-usuario").src = "img/placeholder.png";
+    document.getElementById("imagen-pc").src = "img/placeholder.png";
+
+    
+    document.getElementById("piedra").disabled = false;
+    document.getElementById("papel").disabled = false;
+    document.getElementById("tijera").disabled = false;
+
+
+    document.getElementById("resultado").innerHTML = "";
+}
+
+document.getElementById("btnReiniciar").addEventListener("click", reiniciarJuego);
 
 
 function finalizarJuego() {
     let mensajeFinal = vidasUsuario === 0 ? "¡La computadora gana el juego! 😭" : "¡Ganaste el juego! 🎉";
     document.getElementById("resultado").innerHTML = mensajeFinal;
 
-    // Desactivar botones para que no puedan seguir jugando
+    
     document.getElementById("piedra").disabled = true;
     document.getElementById("papel").disabled = true;
     document.getElementById("tijera").disabled = true;
